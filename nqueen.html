@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>N-Queens Visualization</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+       .board {
+            border-collapse: collapse;
+        }
+       .cell {
+            width: 50px;
+            height: 50px;
+            border: 1px solid black;
+            text-align: center;
+        }
+       .queen {
+            font-size: 30px;
+        }
+    </style>
+</head>
+<body>
+    <h1>N-Queens Visualization</h1>
+    <svg id="board" width="500" height="500"></svg>
+
+    <script>
+        // Function to draw the chessboard
+        function drawBoard(size) {
+            const svg = d3.select("#board");
+            const board = svg.append("g");
+            const cellSize = 500 / size;
+
+            // Draw cells
+            for (let i = 0; i < size; i++) {
+                for (let j = 0; j < size; j++) {
+                    board.append("rect")
+                       .attr("x", i * cellSize)
+                       .attr("y", j * cellSize)
+                       .attr("width", cellSize)
+                       .attr("height", cellSize)
+                       .attr("fill", (i + j) % 2 === 0? "white" : "gray")
+                       .classed("cell", true);
+                }
+            }
+
+            return board;
+        }
+
+        // Function to place queens on the board
+        function placeQueens(board, queens) {
+            queens.forEach((queen, row) => {
+                board.append("text")
+                   .attr("x", queen * (500 / queens.length) + 25)
+                   .attr("y", row * (500 / queens.length) + 35)
+                   .text("\u265B")
+                   .classed("queen", true);
+            });
+        }
+
+        // Example N-Queens problem with 8 queens
+        const nQueens = 8;
+        const queens = [0, 1, 2, 3, 4, 5, 6, 7]; // Example placement
+
+        // Draw the board
+        const board = drawBoard(nQueens);
+
+        // Place the queens
+        placeQueens(board, queens);
+    </script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bubble Sort Visualization</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+       .bar {
+            fill: steelblue;
+        }
+       .bar:hover {
+            fill: brown;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bubble Sort Visualization</h1>
+    <svg id="chart" width="500" height="500"></svg>
+
+    <script>
+        // Function to draw the chart
+        function drawChart(data) {
+            const svg = d3.select("#chart");
+            const barWidth = 500 / data.length;
+
+            // Draw bars
+            svg.selectAll(".bar")
+             .data(data)
+             .enter()
+             .append("rect")
+             .attr("x", (d, i) => i * barWidth)
+             .attr("y", d => 500 - d)
+             .attr("width", barWidth)
+             .attr("height", d => d)
+             .classed("bar", true);
+        }
+
+        // Function to visualize the Bubble Sort technique
+        function visualizeBubbleSort(data, delay) {
+            const n = data.length;
+
+            // Sort the data using Bubble Sort
+            for (let i = 0; i < n - 1; i++) {
+                for (let j = 0; j < n - i - 1; j++) {
+                    // Swap elements if current element is greater than next one
+                    if (data[j] > data[j + 1]) {
+                        const temp = data[j];
+                        data[j] = data[j + 1];
+                        data[j + 1] = temp;
+
+                        // Update the chart with the new data
+                        drawChart(data);
+
+                        // Highlight the swapped bars
+                        d3.selectAll(".bar")
+                         .transition()
+                         .delay(delay * (j + 1))
+                         .duration(500)
+                         .attr("fill", "red");
+
+                        // Reset the bars to the original color
+                        setTimeout(() => {
+                            d3.selectAll(".bar")
+                             .transition()
+                             .duration(500)
+                             .attr("fill", "steelblue");
+                        }, delay * (j + 2));
+                    }
+                }
+            }
+        }
+
+        // Example data for Bubble Sort
+        const data = [5, 3, 8, 4, 2];
+        const delay = 1000; // Delay in milliseconds
+
+        // Draw the chart with the initial data
+        drawChart(data);
+
+        // Visualize the Bubble Sort technique
+        visualizeBubbleSort(data, delay);
+    </script>
+</body>
+</html>

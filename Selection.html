@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Selection Sort Visualization</title>
+  <style>
+   .bar {
+      fill: steelblue;
+    }
+  </style>
+</head>
+<body>
+  <h1>Selection Sort</h1>
+  <svg id="chart"></svg>
+
+  <script src="https://d3js.org/d3.v6.min.js"></script>
+  <script>
+    const data = [22, 55, 33, 44, 77, 110, 66, 15, 150];
+
+    const svg = d3.select("#chart")
+     .attr("width", 800)
+     .attr("height", 400);
+
+    const x = d3.scaleLinear()
+     .domain([0, data.length])
+     .range([0, 800]);
+
+    const y = d3.scaleLinear()
+     .domain([0, d3.max(data)])
+     .range([400, 0]);
+
+    const bars = svg.selectAll(".bar")
+     .data(data)
+     .enter()
+     .append("rect")
+     .attr("class", "bar")
+     .attr("x", (d, i) => x(i))
+     .attr("y", d => y(d))
+     .attr("width", x(1) - x(0) - 1)
+     .attr("height", d => 400 - y(d));
+
+    const sort = async () => {
+      for (let i = 0; i < data.length; i++) {
+        let minIndex = i;
+        for (let j = i + 1; j < data.length; j++) {
+          if (data[j] < data[minIndex]) {
+            minIndex = j;
+          }
+        }
+        if (minIndex!== i) {
+          [data[i], data[minIndex]] = [data[minIndex], data[i]];
+          await new Promise(resolve => setTimeout(resolve, 100));
+          bars
+           .transition()
+           .duration(50)
+           .attr("x", (d, i) => x(i))
+           .attr("y", d => y(d));
+        }
+      }
+    };
+
+    sort();
+  </script>
+</body>
+</html>
